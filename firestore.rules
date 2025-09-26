@@ -1,0 +1,97 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ---------------- Users ----------------
+    match /users/{userId} {
+      // only authenticated user can read their own profile
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      // only authenticated user can create their own profile at registration
+      allow create: if request.auth != null && request.auth.uid == userId;
+
+      // allow updates but block role tampering
+      allow update: if request.auth != null 
+        && request.auth.uid == userId
+        && !(request.resource.data.role in ['company','college','faculty']); 
+
+      // ---- Quiz Sessions (Evidence Trail) ----
+      match /quizSessions/{sessionId} {
+        // student can read their own quiz sessions (questions + results)
+        allow read: if request.auth != null && request.auth.uid == userId;
+        // writes only from backend functions (admin SDK), not client
+        allow write: if false;
+      }
+    }
+
+    // ---------------- Internships ----------------
+    match /internships/{docId} {
+      allow read: if request.auth != null; // all authenticated users can view internships
+
+      // only company role can post/edit internships
+      allow create, update, delete: if request.auth != null
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'company';
+    }
+
+    // ---------------- Applications ----------------
+    match /applications/{docId} {
+      // student can create + read their own applications
+      allow create: if request.auth != null && request.resource.data.studentId == request.auth.uid;
+      allow read: if request.auth != null && resource.data.studentId == request.auth.uid;
+
+      // company can read applications for their internships
+      allow read: if request.auth != null
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'company'
+        && resource.data.internshipCompanyId == request.auth.uid;
+
+      // faculty/college can read applications for their students
+      allow read, update: if request.auth != null
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['college','faculty'];
+    }
+
+    // ---------------- Certificates ----------------
+    match /certificates/{docId} {
+      allow create: if request.auth != null && request.resource.data.studentId == request.auth.uid;
+
+      allow read: if request.auth != null && (
+        resource.data.studentId == request.auth.uid
+        || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['college','faculty']
+      );
+
+      allow update: if request.auth != null
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['college','faculty'];
+    }
+
+    // ---------------- Logbooks ----------------
+    match /logbooks/{docId} {
+      // student can create/read their own logs
+      allow create: if request.auth != null && request.resource.data.studentId == request.auth.uid;
+      allow read: if request.auth != null && resource.data.studentId == request.auth.uid;
+
+      // faculty can read/update logs of their assigned students
+      allow read, update: if request.auth != null
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'faculty'
+        && resource.data.facultyId == request.auth.uid;
+    }
+
+    // ---------------- Courses ----------------
+    match /courses/{docId} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if request.auth != null
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['college','faculty'];
+    }
+
+    // ---------------- Skills Catalog ----------------
+    match /skillsCatalog/{docId} {
+      allow read: if request.auth != null;
+      // only college/admin can add approved skills
+      allow create, update, delete: if request.auth != null
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'college';
+    }
+
+    // ---------------- Default deny ----------------
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
