@@ -59,29 +59,15 @@ export default function Applications() {
 
   return (
     <View style={styles.container}>
-<<<<<<< HEAD
-      <Text style={styles.heading}>📄 My Applications</Text>
-=======
       <View style={styles.headerBar}>
         <Text style={styles.heading}>My Applications</Text>
       </View>
->>>>>>> f68b3469f9b2e216a672f073bf01c2425c9cb7c8
       <FlatList
         data={rows}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: 24 }}
         renderItem={({ item }) => (
           <View style={styles.card}>
-<<<<<<< HEAD
-            <Text style={styles.title}>💼 {item.internship?.title || 'Unknown Internship'}</Text>
-            <Text>🏢 Company: {item.internship?.companyName || 'N/A'}</Text>
-            <Text>📍 Location: {item.internship?.location || 'N/A'}</Text>
-            <Text>🖥️ Mode: {item.internship?.mode || 'N/A'}</Text>
-            <Text style={styles.status}>Status: {item.status === 'pending' ? '⏳ Pending' : item.status === 'approved' ? '✅ Approved' : '❌ Rejected'}</Text>
-          </View>
-        )}
-        ListEmptyComponent={<Text style={{ color: '#888', textAlign: 'center', marginTop: 24 }}>You haven’t applied to any internships yet. 🚀</Text>}
-=======
             <Text style={styles.title}>{item.internship?.title || 'Unknown Internship'}</Text>
             <Text style={styles.company}>Company: <Text style={styles.companyName}>{item.internship?.companyName || 'N/A'}</Text></Text>
             <Text style={styles.info}>Location: <Text style={styles.infoValue}>{item.internship?.location || 'N/A'}</Text></Text>
@@ -92,33 +78,12 @@ export default function Applications() {
           </View>
         )}
         ListEmptyComponent={<Text style={styles.emptyText}>You haven’t applied to any internships yet.</Text>}
->>>>>>> f68b3469f9b2e216a672f073bf01c2425c9cb7c8
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-<<<<<<< HEAD
-  container: { flex: 1, padding: 16, backgroundColor: "#f5f8ff" },
-  heading: { fontSize: 22, fontWeight: 'bold', marginBottom: 12, color: "#0b7cff" },
-  card: {
-    marginVertical: 8,
-    padding: 14,
-    borderWidth: 1,
-    borderColor: '#e3e8f0',
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    shadowColor: "#0b7cff",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 2,
-  },
-  title: { fontSize: 16, fontWeight: 'bold', color: "#1976D2", marginBottom: 4 },
-  status: { marginTop: 8, fontWeight: '600', color: "#0b7cff" },
-  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-=======
   container: {
     flex: 1,
     backgroundColor: '#f4f7fb',
@@ -221,5 +186,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
->>>>>>> f68b3469f9b2e216a672f073bf01c2425c9cb7c8
 });
