@@ -4,12 +4,13 @@ import {
   View,
   Text,
   Image,
-  Button,
   StyleSheet,
   Alert,
   ActivityIndicator,
   TouchableOpacity,
   TextInput,
+  ScrollView,
+  StatusBar,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -101,73 +102,184 @@ export default function ProfileScreen() {
   if (!profile) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" color="#0b7cff" />
         <Text>Loading profile...</Text>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.card}>
-        {/* Profile Pic */}
-        <TouchableOpacity onPress={pickImage} disabled={uploading}>
-          {profile.photoUrl ? (
-            <Image source={{ uri: profile.photoUrl }} style={styles.avatar} />
-          ) : (
-            <View style={styles.placeholderAvatar}>
-              <Text style={styles.placeholderText}>
-                {profile.name ? profile.name[0].toUpperCase() : "?"}
-              </Text>
-            </View>
-          )}
-        </TouchableOpacity>
-        {uploading && <ActivityIndicator style={{ marginVertical: 10 }} />}
-        <Text style={styles.hint}>Tap picture to upload/change</Text>
-
-        {/* Profile Info */}
-        <Text style={styles.name}>{profile.name}</Text>
-        <Text>{profile.email}</Text>
-        <Text>Student ID: {profile.studentId || "Not assigned"}</Text>
-        <Text>College ID: {profile.collegeId || "N/A"}</Text>
-        <Text>{profile.collegeName}</Text>
-        <Text>
-          {profile.branch} - Year {profile.year}
-        </Text>
-        <Text>Skills: {profile.skills?.join(", ") || "N/A"}</Text>
-
-        {/* Add skill input */}
-        <View style={styles.skillRow}>
-          <TextInput
-            style={styles.input}
-            placeholder="Add a new skill"
-            value={newSkill}
-            onChangeText={setNewSkill}
-          />
-          <Button
-            title={savingSkill ? "Adding..." : "Add"}
-            onPress={addSkill}
-            disabled={savingSkill}
-          />
+    <>
+      <StatusBar barStyle="light-content" backgroundColor="#0b7cff" />
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Header */}
+        <View style={styles.headerGradient}>
+          <View style={styles.headerContent}>
+            <Text style={styles.head}>👤 My Profile</Text>
+            <Text style={styles.subtitle}>Manage your information</Text>
+          </View>
+          <View style={styles.headerWave} />
         </View>
-      </View>
 
-      {/* Logout */}
-      <View style={styles.logoutContainer}>
-        <Button title="Logout" onPress={logout} color="red" />
-      </View>
-    </View>
+        {/* Profile Card */}
+        <View style={styles.card}>
+          {/* Profile Pic */}
+          <TouchableOpacity onPress={pickImage} disabled={uploading}>
+            {profile.photoUrl ? (
+              <Image source={{ uri: profile.photoUrl }} style={styles.avatar} />
+            ) : (
+              <View style={styles.placeholderAvatar}>
+                <Text style={styles.placeholderText}>
+                  {profile.name ? profile.name[0].toUpperCase() : "?"}
+                </Text>
+              </View>
+            )}
+          </TouchableOpacity>
+          {uploading && <ActivityIndicator style={{ marginVertical: 10 }} />}
+          <Text style={styles.hint}>📷 Tap picture to upload/change</Text>
+
+          {/* Profile Info */}
+          <Text style={styles.name}>🎓 {profile.name}</Text>
+          <Text style={styles.email}>✉️ {profile.email}</Text>
+          <Text style={styles.info}>
+            🆔 Student ID:{" "}
+            <Text style={styles.infoValue}>
+              {profile.studentId || "Not assigned"}
+            </Text>
+          </Text>
+          <Text style={styles.info}>
+            🏫 College ID:{" "}
+            <Text style={styles.infoValue}>{profile.collegeId || "N/A"}</Text>
+          </Text>
+          <Text style={styles.info}>🏢 {profile.collegeName}</Text>
+          <Text style={styles.info}>
+            📚 {profile.branch} - Year {profile.year}
+          </Text>
+          <Text style={styles.skillLabel}>💡 Skills:</Text>
+          {profile.skills?.length ? (
+            <View style={styles.skillWrap}>
+              {profile.skills.map((s, idx) => (
+                <View key={idx} style={styles.skillChip}>
+                  <Text style={styles.skillText}>✨ {s}</Text>
+                </View>
+              ))}
+            </View>
+          ) : (
+            <Text style={styles.noSkills}>No skills added yet. 🚀</Text>
+          )}
+
+          {/* Add skill input */}
+          <View style={styles.skillRow}>
+            <TextInput
+              style={styles.input}
+              placeholder="Add a new skill"
+              value={newSkill}
+              onChangeText={setNewSkill}
+              placeholderTextColor="#a0a0a0"
+            />
+            <TouchableOpacity
+              style={[styles.btn, savingSkill && styles.btnDisabled]}
+              onPress={addSkill}
+              disabled={savingSkill}
+              activeOpacity={0.8}
+            >
+              {savingSkill ? (
+                <ActivityIndicator color="#fff" size="small" />
+              ) : (
+                <Text style={styles.btnText}>Add</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Logout */}
+        <View style={styles.logoutContainer}>
+          <TouchableOpacity
+            style={styles.logoutBtn}
+            onPress={logout}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.logoutText}>Logout</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, justifyContent: "space-between" },
-  card: { alignItems: "center" },
-  avatar: { width: 120, height: 120, borderRadius: 60, marginBottom: 6 },
+  container: {
+    flex: 1,
+    backgroundColor: "#f8fafc",
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: 30,
+  },
+  // Header
+  headerGradient: {
+    position: "relative",
+    width: "100%",
+    height: 160,
+    backgroundColor: "#0b7cff",
+    paddingTop: 20,
+    overflow: "hidden",
+  },
+  headerContent: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 24,
+    zIndex: 2,
+  },
+  head: {
+    fontSize: 26,
+    fontWeight: "900",
+    color: "#fff",
+    letterSpacing: 0.5,
+    marginBottom: 6,
+    marginTop: 16,
+  },
+  subtitle: {
+    fontSize: 15,
+    color: "rgba(255, 255, 255, 0.9)",
+    fontWeight: "500",
+  },
+  headerWave: {
+    position: "absolute",
+    bottom: -2,
+    left: 0,
+    right: 0,
+    height: 30,
+    backgroundColor: "#f8fafc",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+  },
+  // Card
+  card: {
+    marginTop: -20,
+    marginHorizontal: 20,
+    backgroundColor: "#fff",
+    borderRadius: 24,
+    padding: 28,
+    shadowColor: "#0b7cff",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.12,
+    shadowRadius: 16,
+    elevation: 8,
+    borderWidth: 1,
+    borderColor: "rgba(11, 124, 255, 0.08)",
+    alignItems: "center",
+  },
+  avatar: { width: 110, height: 110, borderRadius: 55, marginBottom: 6 },
   placeholderAvatar: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 110,
+    height: 110,
+    borderRadius: 55,
     backgroundColor: "#ccc",
     justifyContent: "center",
     alignItems: "center",
@@ -175,22 +287,94 @@ const styles = StyleSheet.create({
   },
   placeholderText: { fontSize: 40, color: "#fff", fontWeight: "bold" },
   hint: { fontSize: 12, color: "#555", marginBottom: 12 },
-  name: { fontSize: 18, fontWeight: "bold", marginTop: 6 },
+  name: { fontSize: 20, fontWeight: "bold", marginTop: 6, color: "#0b7cff" },
+  email: { fontSize: 15, color: "#374151", marginBottom: 4 },
+  info: { fontSize: 15, color: "#374151", marginBottom: 2 },
+  infoValue: { fontWeight: "700", color: "#0b7cff" },
+  skillLabel: {
+    marginTop: 10,
+    fontWeight: "600",
+    color: "#222",
+    fontSize: 15,
+  },
+  skillWrap: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginTop: 6,
+    gap: 8,
+  },
+  skillChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 5,
+    paddingHorizontal: 12,
+    borderRadius: 999,
+    backgroundColor: "#e8f5e9",
+    marginRight: 8,
+    marginBottom: 8,
+  },
+  skillText: { fontSize: 13, fontWeight: "600", color: "#388e3c" },
+  noSkills: { color: "#888", fontStyle: "italic", marginTop: 4 },
   skillRow: {
     flexDirection: "row",
-    marginTop: 10,
+    marginTop: 16,
     width: "100%",
     alignItems: "center",
   },
   input: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 6,
-    paddingHorizontal: 8,
-    paddingVertical: 6,
+    borderWidth: 2,
+    borderColor: "#e5e7eb",
+    borderRadius: 16,
+    backgroundColor: "#f9fafb",
+    paddingHorizontal: 18,
+    paddingVertical: 14,
+    fontSize: 16,
+    color: "#374151",
+    fontWeight: "500",
     marginRight: 8,
   },
-  logoutContainer: { marginTop: 20 },
+  btn: {
+    backgroundColor: "#0b7cff",
+    paddingVertical: 14,
+    paddingHorizontal: 22,
+    borderRadius: 16,
+    alignItems: "center",
+    shadowColor: "#0b7cff",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+    elevation: 6,
+  },
+  btnDisabled: {
+    opacity: 0.7,
+  },
+  btnText: {
+    color: "#fff",
+    fontWeight: "800",
+    fontSize: 16,
+    letterSpacing: 0.5,
+  },
+  logoutContainer: { marginTop: 30, alignItems: "center" },
+  logoutBtn: {
+    backgroundColor: "#fff",
+    borderColor: "#dc2626",
+    borderWidth: 2,
+    borderRadius: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 40,
+    alignItems: "center",
+    shadowColor: "#dc2626",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  logoutText: {
+    color: "#dc2626",
+    fontWeight: "800",
+    fontSize: 16,
+    letterSpacing: 0.5,
+  },
   center: { flex: 1, justifyContent: "center", alignItems: "center" },
 });

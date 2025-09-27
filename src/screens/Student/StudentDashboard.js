@@ -1,6 +1,6 @@
 // src/screens/Student/StudentDashboard.js
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator, Alert, Linking, ProgressBarAndroid, Platform } from 'react-native';
+import { View, Text, Button, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator, Alert, Linking, ProgressBarAndroid, Platform, ScrollView } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
@@ -187,12 +187,12 @@ export default function StudentDashboard() {
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Student Dashboard</Text>
-      <Text style={{marginBottom:8}}>Welcome, {user?.email}</Text>
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 30 }}>
+      <Text style={styles.title}>🎓 Student Dashboard</Text>
+      <Text style={styles.welcome}>Welcome, <Text style={{color:'#0b7cff', fontWeight:'bold'}}>{user?.email}</Text> 👋</Text>
 
       <TouchableOpacity style={[styles.uploadBtn, uploading && {opacity:0.7}]} onPress={uploadCertificate} disabled={uploading}>
-        <Text style={{color:'#fff', fontWeight:'700'}}>{uploading ? 'Uploading...' : 'Upload Certificate for Verification'}</Text>
+        <Text style={{color:'#fff', fontWeight:'700'}}>{uploading ? 'Uploading...' : 'Upload Certificate for Verification 📤'}</Text>
       </TouchableOpacity>
 
       {uploading && (
@@ -205,12 +205,12 @@ export default function StudentDashboard() {
         </View>
       )}
 
-      <Text style={{marginTop:18, fontSize:16, fontWeight:'600'}}>Your Certificates</Text>
+      <Text style={styles.sectionTitle}>📑 Your Certificates</Text>
 
       {loadingList ? (
         <ActivityIndicator style={{marginTop:12}} />
       ) : certs.length === 0 ? (
-        <Text style={{marginTop:12,color:'#666'}}>No certificates uploaded yet.</Text>
+        <Text style={styles.noCerts}>No certificates uploaded yet. 🚀</Text>
       ) : (
         <FlatList
           data={certs}
@@ -223,14 +223,17 @@ export default function StudentDashboard() {
       <View style={{marginTop:20}}>
         <Button title="Logout" onPress={logout} />
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container:{flex:1,padding:16},
-  title:{fontSize:22,fontWeight:'700',marginBottom:10},
+  container:{flex:1, padding:16, backgroundColor:'#f5f8ff'},
+  title:{fontSize:22,fontWeight:'700',marginBottom:10, color:'#0b7cff'},
+  welcome:{marginBottom:8, fontSize:16},
   uploadBtn:{backgroundColor:'#0b7cff',padding:14,borderRadius:8,alignItems:'center'},
+  sectionTitle: {marginTop:18, fontSize:16, fontWeight:'600', color:'#1976D2'},
   certItem:{flexDirection:'row',padding:12,backgroundColor:'#fafafa',borderRadius:8,marginBottom:10,alignItems:'center'},
-  openBtn:{backgroundColor:'#0b7cff',paddingVertical:8,paddingHorizontal:12,borderRadius:6}
+  openBtn:{backgroundColor:'#0b7cff',paddingVertical:8,paddingHorizontal:12,borderRadius:6},
+  noCerts: {marginTop:12, color:'#888', fontStyle:'italic', textAlign:'center'},
 });

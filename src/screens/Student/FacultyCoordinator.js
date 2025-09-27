@@ -33,31 +33,71 @@ export default function FacultyCoordinator() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Faculty Coordinator</Text>
+      <Text style={styles.heading}>👨‍🏫 Faculty Coordinator</Text>
       {faculty ? (
-        <Text style={styles.info}>Coordinator: {faculty.name}</Text>
+        <View style={styles.facultyCard}>
+          <Text style={styles.info}>Coordinator: <Text style={styles.facultyName}>{faculty.name}</Text></Text>
+          {faculty.email && <Text style={styles.email}>✉️ {faculty.email}</Text>}
+        </View>
       ) : (
-        <Text>No faculty assigned yet.</Text>
+        <Text style={styles.noFaculty}>No faculty assigned yet. 🕵️‍♂️</Text>
       )}
-      <Text style={styles.subheading}>Plans</Text>
+      <Text style={styles.subheading}>📝 Your Plans</Text>
       <FlatList
         data={plans}
         keyExtractor={(_, idx) => idx.toString()}
         renderItem={({ item }) => (
           <View style={styles.planCard}>
-            <Text>{item.plan}</Text>
-            <Text style={{ fontSize: 12, color: "gray" }}>{String(item.createdAt)}</Text>
+            <Text style={styles.planText}>📌 {item.plan}</Text>
+            <Text style={styles.planDate}>
+              {item.createdAt
+                ? new Date(item.createdAt.seconds * 1000).toLocaleDateString()
+                : ""}
+            </Text>
           </View>
         )}
+        ListEmptyComponent={
+          <Text style={styles.noPlans}>No plans found. Start planning your goals! 🚀</Text>
+        }
+        contentContainerStyle={plans.length === 0 && { flex: 1, justifyContent: "center" }}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 12 },
-  heading: { fontSize: 20, fontWeight: "bold" },
-  subheading: { marginTop: 12, fontWeight: "bold" },
-  info: { fontSize: 16, marginVertical: 6 },
-  planCard: { marginVertical: 6, padding: 8, backgroundColor: "#f9f9f9", borderRadius: 6 },
+  container: { flex: 1, padding: 18, backgroundColor: "#f5f8ff" },
+  heading: { fontSize: 22, fontWeight: "bold", color: "#0b7cff", marginBottom: 10 },
+  facultyCard: {
+    backgroundColor: "#e3f2fd",
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 12,
+    shadowColor: "#0b7cff",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  info: { fontSize: 16, color: "#222", marginBottom: 2 },
+  facultyName: { color: "#1976D2", fontWeight: "bold" },
+  email: { color: "#374151", fontSize: 14, marginTop: 2 },
+  noFaculty: { color: "#888", fontStyle: "italic", marginBottom: 12 },
+  subheading: { marginTop: 16, fontWeight: "bold", fontSize: 18, color: "#1976D2" },
+  planCard: {
+    marginVertical: 8,
+    padding: 14,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#e3e8f0",
+    shadowColor: "#0b7cff",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  planText: { fontSize: 16, color: "#222", marginBottom: 4 },
+  planDate: { fontSize: 12, color: "#888" },
+  noPlans: { color: "#888", fontStyle: "italic", marginTop: 24, textAlign: "center" },
 });
