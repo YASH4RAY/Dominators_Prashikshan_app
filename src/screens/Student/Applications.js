@@ -48,14 +48,31 @@ export default function Applications() {
     );
   }
 
+  // Helper for status color
+  const getStatusStyle = (status) => {
+    switch (status) {
+      case 'accepted': return styles.statusAccepted;
+      case 'rejected': return styles.statusRejected;
+      default: return styles.statusPending;
+    }
+  };
+
   return (
     <View style={styles.container}>
+<<<<<<< HEAD
       <Text style={styles.heading}>📄 My Applications</Text>
+=======
+      <View style={styles.headerBar}>
+        <Text style={styles.heading}>My Applications</Text>
+      </View>
+>>>>>>> f68b3469f9b2e216a672f073bf01c2425c9cb7c8
       <FlatList
         data={rows}
         keyExtractor={(item) => item.id}
+        contentContainerStyle={{ paddingBottom: 24 }}
         renderItem={({ item }) => (
           <View style={styles.card}>
+<<<<<<< HEAD
             <Text style={styles.title}>💼 {item.internship?.title || 'Unknown Internship'}</Text>
             <Text>🏢 Company: {item.internship?.companyName || 'N/A'}</Text>
             <Text>📍 Location: {item.internship?.location || 'N/A'}</Text>
@@ -64,12 +81,25 @@ export default function Applications() {
           </View>
         )}
         ListEmptyComponent={<Text style={{ color: '#888', textAlign: 'center', marginTop: 24 }}>You haven’t applied to any internships yet. 🚀</Text>}
+=======
+            <Text style={styles.title}>{item.internship?.title || 'Unknown Internship'}</Text>
+            <Text style={styles.company}>Company: <Text style={styles.companyName}>{item.internship?.companyName || 'N/A'}</Text></Text>
+            <Text style={styles.info}>Location: <Text style={styles.infoValue}>{item.internship?.location || 'N/A'}</Text></Text>
+            <Text style={styles.info}>Mode: <Text style={styles.infoValue}>{item.internship?.mode || 'N/A'}</Text></Text>
+            <View style={styles.statusRow}>
+              <Text style={[styles.statusChip, getStatusStyle(item.status)]}>{item.status}</Text>
+            </View>
+          </View>
+        )}
+        ListEmptyComponent={<Text style={styles.emptyText}>You haven’t applied to any internships yet.</Text>}
+>>>>>>> f68b3469f9b2e216a672f073bf01c2425c9cb7c8
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
   container: { flex: 1, padding: 16, backgroundColor: "#f5f8ff" },
   heading: { fontSize: 22, fontWeight: 'bold', marginBottom: 12, color: "#0b7cff" },
   card: {
@@ -88,4 +118,108 @@ const styles = StyleSheet.create({
   title: { fontSize: 16, fontWeight: 'bold', color: "#1976D2", marginBottom: 4 },
   status: { marginTop: 8, fontWeight: '600', color: "#0b7cff" },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+=======
+  container: {
+    flex: 1,
+    backgroundColor: '#f4f7fb',
+    padding: 0,
+  },
+  headerBar: {
+    width: '100%',
+    height: 70,
+    backgroundColor: '#4f3cc9',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
+    paddingHorizontal: 22,
+    paddingBottom: 10,
+    borderBottomLeftRadius: 18,
+    borderBottomRightRadius: 18,
+    marginBottom: -10,
+  },
+  heading: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#fff',
+    letterSpacing: 0.5,
+  },
+  cwrd: {
+    marginVertical: 12,
+    marginHorizontal: 18,
+    padding: 20,
+    borderRadius: 14,
+    backgroundColor: '#fff',
+    shadowColor: '#4f3cc9',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: '#e3eaf2',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#4f3cc9',
+    marginBottom: 4,
+    letterSpacing: 0.3,
+  },
+  company: {
+    fontSize: 15,
+    color: '#333',
+    marginBottom: 2,
+  },
+  companyName: {
+    fontWeight: '700',
+    color: '#4f3cc9',
+  },
+  info: {
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 2,
+  },
+  infoValue: {
+    fontWeight: '600',
+    color: '#4f3cc9',
+  },
+  statusRow: {
+    marginTop: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  statusChip: {
+    paddingVertical: 7,
+    paddingHorizontal: 18,
+    borderRadius: 999,
+    fontWeight: '700',
+    fontSize: 15,
+    color: '#fff',
+    letterSpacing: 0.2,
+    marginRight: 8,
+    shadowColor: '#4f3cc9',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  statusAccepted: {
+    backgroundColor: '#43c6ac',
+  },
+  statusRejected: {
+    backgroundColor: '#f95f62',
+  },
+  statusPending: {
+    backgroundColor: '#4f3cc9',
+  },
+  emptyText: {
+    color: '#888',
+    fontSize: 15,
+    textAlign: 'center',
+    marginTop: 24,
+  },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+>>>>>>> f68b3469f9b2e216a672f073bf01c2425c9cb7c8
 });
