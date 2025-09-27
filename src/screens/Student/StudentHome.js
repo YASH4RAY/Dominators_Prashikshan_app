@@ -45,7 +45,6 @@ export default function StudentHome() {
 
   return (
     <View style={styles.container}>
-      {/* Profile Card */}
       <View style={styles.card}>
         {profile.photoUrl ? (
           <Image source={{ uri: profile.photoUrl }} style={styles.avatar} />
@@ -56,16 +55,14 @@ export default function StudentHome() {
             </Text>
           </View>
         )}
-        <View style={{ marginLeft: 12, flex: 1 }}>
+        <View style={styles.profileInfo}>
           <Text style={styles.name}>{profile.name}</Text>
-          <Text>Student ID: {profile.studentId || "Not assigned"}</Text>
-          <Text>College ID: {profile.collegeId || "N/A"}</Text>
-          <Text>{profile.collegeName}</Text>
-          <Text>
-            {profile.branch} - Year {profile.year}
-          </Text>
+          <Text style={styles.infoText}>Student ID: <Text style={styles.infoValue}>{profile.studentId || "Not assigned"}</Text></Text>
+          <Text style={styles.infoText}>College ID: <Text style={styles.infoValue}>{profile.collegeId || "N/A"}</Text></Text>
+          <Text style={styles.infoText}>{profile.collegeName}</Text>
+          <Text style={styles.infoText}>{profile.branch} - Year {profile.year}</Text>
 
-          <Text style={{ marginTop: 8, fontWeight: "600" }}>Skills:</Text>
+          <Text style={styles.skillTitle}>Skills:</Text>
           {profile.skills?.length ? (
             <View style={styles.skillWrap}>
               {profile.skills.map((s, idx) => (
@@ -75,13 +72,11 @@ export default function StudentHome() {
               ))}
             </View>
           ) : (
-            <Text>No skills added yet</Text>
+            <Text style={styles.noSkillText}>No skills added yet</Text>
           )}
 
           {facultyName && (
-            <Text style={{ marginTop: 6 }}>
-              Faculty Coordinator: {facultyName}
-            </Text>
+            <Text style={styles.facultyText}>Faculty Coordinator: <Text style={styles.infoValue}>{facultyName}</Text></Text>
           )}
         </View>
       </View>
@@ -90,39 +85,114 @@ export default function StudentHome() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20 },
+  container: {
+    flex: 1,
+    padding: 22,
+    backgroundColor: '#f4f7fb',
+    justifyContent: 'center',
+  },
   card: {
-    flexDirection: "row",
-    padding: 12,
+    flexDirection: 'row',
+    padding: 20,
+    borderRadius: 16,
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.09,
+    shadowRadius: 8,
+    elevation: 4,
     borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 8,
-    alignItems: "center",
-    backgroundColor: "#fafafa",
+    borderColor: '#e3eaf2',
   },
-  avatar: { width: 100, height: 100, borderRadius: 50 },
+  avatar: {
+    width: 110,
+    height: 110,
+    borderRadius: 55,
+    borderWidth: 3,
+    borderColor: '#0b7cff',
+    backgroundColor: '#eaf4ff',
+  },
   placeholderAvatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: "#bbb",
-    justifyContent: "center",
-    alignItems: "center",
+    width: 110,
+    height: 110,
+    borderRadius: 55,
+    backgroundColor: '#bbb',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 3,
+    borderColor: '#0b7cff',
   },
-  placeholderText: { fontSize: 36, fontWeight: "bold", color: "#fff" },
-  name: { fontSize: 18, fontWeight: "bold", marginBottom: 4 },
-  center: { flex: 1, justifyContent: "center", alignItems: "center" },
+  placeholderText: {
+    fontSize: 38,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  profileInfo: {
+    marginLeft: 18,
+    flex: 1,
+  },
+  name: {
+    fontSize: 22,
+    fontWeight: '800',
+    marginBottom: 6,
+    color: '#0b7cff',
+    letterSpacing: 0.3,
+  },
+  infoText: {
+    fontSize: 15,
+    color: '#333',
+    marginBottom: 2,
+  },
+  infoValue: {
+    fontWeight: '700',
+    color: '#0b7cff',
+  },
+  skillTitle: {
+    marginTop: 12,
+    fontWeight: '700',
+    fontSize: 15,
+    color: '#222',
+    marginBottom: 2,
+  },
   skillWrap: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     marginTop: 6,
-    gap: 6,
+    gap: 8,
   },
   skillChip: {
-    paddingVertical: 4,
-    paddingHorizontal: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 14,
     borderRadius: 999,
-    backgroundColor: "#e8f5e9",
+    backgroundColor: '#eaf4ff',
+    marginBottom: 6,
+    shadowColor: '#0b7cff',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.10,
+    shadowRadius: 2,
+    elevation: 1,
   },
-  skillText: { fontSize: 12, fontWeight: "600" },
+  skillText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#0b7cff',
+    letterSpacing: 0.2,
+  },
+  noSkillText: {
+    color: '#888',
+    fontSize: 13,
+    marginTop: 4,
+  },
+  facultyText: {
+    marginTop: 10,
+    fontWeight: '600',
+    color: '#333',
+    fontSize: 15,
+  },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });

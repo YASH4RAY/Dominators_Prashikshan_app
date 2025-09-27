@@ -188,29 +188,31 @@ export default function StudentDashboard() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Student Dashboard</Text>
-      <Text style={{marginBottom:8}}>Welcome, {user?.email}</Text>
+      <View style={styles.headerCard}>
+        <Text style={styles.title}>Student Dashboard</Text>
+        <Text style={styles.welcome}>Welcome, <Text style={{fontWeight:'700'}}>{user?.email}</Text></Text>
+      </View>
 
       <TouchableOpacity style={[styles.uploadBtn, uploading && {opacity:0.7}]} onPress={uploadCertificate} disabled={uploading}>
-        <Text style={{color:'#fff', fontWeight:'700'}}>{uploading ? 'Uploading...' : 'Upload Certificate for Verification'}</Text>
+        <Text style={styles.uploadBtnText}>{uploading ? 'Uploading...' : 'Upload Certificate for Verification'}</Text>
       </TouchableOpacity>
 
       {uploading && (
-        <View style={{marginTop:10, width:'100%'}}>
+        <View style={styles.progressWrap}>
           {Platform.OS === 'android' ? (
             <ProgressBarAndroid styleAttr="Horizontal" indeterminate={false} progress={progress} />
           ) : (
-            <Text style={{color:'#666', marginTop:6}}>Progress: {(progress*100).toFixed(0)}%</Text>
+            <Text style={styles.progressText}>Progress: {(progress*100).toFixed(0)}%</Text>
           )}
         </View>
       )}
 
-      <Text style={{marginTop:18, fontSize:16, fontWeight:'600'}}>Your Certificates</Text>
+      <Text style={styles.sectionTitle}>Your Certificates</Text>
 
       {loadingList ? (
         <ActivityIndicator style={{marginTop:12}} />
       ) : certs.length === 0 ? (
-        <Text style={{marginTop:12,color:'#666'}}>No certificates uploaded yet.</Text>
+        <Text style={styles.emptyText}>No certificates uploaded yet.</Text>
       ) : (
         <FlatList
           data={certs}
@@ -220,17 +222,126 @@ export default function StudentDashboard() {
         />
       )}
 
-      <View style={{marginTop:20}}>
-        <Button title="Logout" onPress={logout} />
-      </View>
+      <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
+        <Text style={styles.logoutBtnText}>Logout</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container:{flex:1,padding:16},
-  title:{fontSize:22,fontWeight:'700',marginBottom:10},
-  uploadBtn:{backgroundColor:'#0b7cff',padding:14,borderRadius:8,alignItems:'center'},
-  certItem:{flexDirection:'row',padding:12,backgroundColor:'#fafafa',borderRadius:8,marginBottom:10,alignItems:'center'},
-  openBtn:{backgroundColor:'#0b7cff',paddingVertical:8,paddingHorizontal:12,borderRadius:6}
+  container: {
+    flex: 1,
+    padding: 18,
+    backgroundColor: '#f4f7fb',
+  },
+  headerCard: {
+    backgroundColor: '#fff',
+    borderRadius: 14,
+    padding: 18,
+    marginBottom: 18,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: '800',
+    color: '#0b7cff',
+    marginBottom: 6,
+    letterSpacing: 0.5,
+  },
+  welcome: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 2,
+  },
+  uploadBtn: {
+    backgroundColor: 'linear-gradient(90deg, #0b7cff 0%, #00c6fb 100%)',
+    padding: 16,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginBottom: 10,
+    shadowColor: '#0b7cff',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  uploadBtnText: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 16,
+    letterSpacing: 0.2,
+  },
+  progressWrap: {
+    marginTop: 10,
+    width: '100%',
+  },
+  progressText: {
+    color: '#0b7cff',
+    marginTop: 6,
+    fontWeight: '600',
+  },
+  sectionTitle: {
+    marginTop: 18,
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#222',
+    marginBottom: 6,
+  },
+  emptyText: {
+    marginTop: 12,
+    color: '#888',
+    fontSize: 15,
+    textAlign: 'center',
+  },
+  certItem: {
+    flexDirection: 'row',
+    padding: 16,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    marginBottom: 14,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.07,
+    shadowRadius: 4,
+    elevation: 1,
+    borderWidth: 1,
+    borderColor: '#e3eaf2',
+  },
+  openBtn: {
+    backgroundColor: '#0b7cff',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    shadowColor: '#0b7cff',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.12,
+    shadowRadius: 3,
+    elevation: 1,
+  },
+  logoutBtn: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    paddingVertical: 12,
+    alignItems: 'center',
+    marginTop: 28,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.07,
+    shadowRadius: 3,
+    elevation: 1,
+    borderWidth: 1,
+    borderColor: '#e3eaf2',
+  },
+  logoutBtnText: {
+    color: '#0b7cff',
+    fontWeight: '700',
+    fontSize: 16,
+    letterSpacing: 0.2,
+  },
 });

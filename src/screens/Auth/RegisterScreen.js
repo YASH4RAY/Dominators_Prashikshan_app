@@ -121,159 +121,221 @@ export default function RegisterScreen({ navigation, route }) {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.head}>Register as {role.toUpperCase()}</Text>
+      <View style={styles.headerGradient}>
+        <Text style={styles.head}>Register as {role.toUpperCase()}</Text>
+      </View>
+      <View style={styles.card}>
+        <TextInput
+          style={styles.input}
+          placeholder="Full name"
+          value={name}
+          onChangeText={setName}
+          autoCapitalize="words"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Full name"
-        value={name}
-        onChangeText={setName}
-        autoCapitalize="words"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+        {role === 'student' && (
+          <>
+            <TextInput
+              style={styles.input}
+              placeholder="College ID"
+              value={enteredCollegeId}
+              onChangeText={setEnteredCollegeId}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="College name"
+              value={collegeName}
+              onChangeText={setCollegeName}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Branch"
+              value={branch}
+              onChangeText={setBranch}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Year / Semester"
+              value={year}
+              onChangeText={setYear}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Skills (comma-separated)"
+              value={skills}
+              onChangeText={setSkills}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Domains of interest (comma-separated)"
+              value={domains}
+              onChangeText={setDomains}
+            />
+          </>
+        )}
 
-      {role === 'student' && (
-        <>
-          <TextInput
-            style={styles.input}
-            placeholder="College ID"
-            value={enteredCollegeId}
-            onChangeText={setEnteredCollegeId}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="College name"
-            value={collegeName}
-            onChangeText={setCollegeName}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Branch"
-            value={branch}
-            onChangeText={setBranch}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Year / Semester"
-            value={year}
-            onChangeText={setYear}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Skills (comma-separated)"
-            value={skills}
-            onChangeText={setSkills}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Domains of interest (comma-separated)"
-            value={domains}
-            onChangeText={setDomains}
-          />
-        </>
-      )}
+        {role === 'college' && (
+          <>
+            <TextInput
+              style={styles.input}
+              placeholder="College name"
+              value={orgName}
+              onChangeText={setOrgName}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="College ID"
+              value={collegeIdInput}
+              onChangeText={setCollegeIdInput}
+            />
+          </>
+        )}
 
-      {role === 'college' && (
-        <>
+        {role === 'company' && (
           <TextInput
             style={styles.input}
-            placeholder="College name"
+            placeholder="Company name"
             value={orgName}
             onChangeText={setOrgName}
           />
-          <TextInput
-            style={styles.input}
-            placeholder="College ID"
-            value={collegeIdInput}
-            onChangeText={setCollegeIdInput}
-          />
-        </>
-      )}
+        )}
 
-      {role === 'company' && (
-        <TextInput
-          style={styles.input}
-          placeholder="Company name"
-          value={orgName}
-          onChangeText={setOrgName}
-        />
-      )}
+        {role === 'faculty' && (
+          <>
+            <TextInput
+              style={styles.input}
+              placeholder="Faculty ID"
+              value={facultyId}
+              onChangeText={setFacultyId}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Profession"
+              value={profession}
+              onChangeText={setProfession}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Department"
+              value={department}
+              onChangeText={setDepartment}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Branch"
+              value={facultyBranch}
+              onChangeText={setFacultyBranch}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="College Name"
+              value={facultyCollege}
+              onChangeText={setFacultyCollege}
+            />
+          </>
+        )}
 
-      {role === 'faculty' && (
-        <>
-          <TextInput
-            style={styles.input}
-            placeholder="Faculty ID"
-            value={facultyId}
-            onChangeText={setFacultyId}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Profession"
-            value={profession}
-            onChangeText={setProfession}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Department"
-            value={department}
-            onChangeText={setDepartment}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Branch"
-            value={facultyBranch}
-            onChangeText={setFacultyBranch}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="College Name"
-            value={facultyCollege}
-            onChangeText={setFacultyCollege}
-          />
-        </>
-      )}
+        <TouchableOpacity style={styles.btn} onPress={onRegister} disabled={loading}>
+          {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>Register</Text>}
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.btn} onPress={onRegister} disabled={loading}>
-        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.btnText}>Register</Text>}
-      </TouchableOpacity>
-
-      <TouchableOpacity style={{ marginTop: 16 }} onPress={() => navigation.navigate('Login')}>
-        <Text>Already registered? Login</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.loginLink} onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.loginText}>Already registered? Login</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20, flexGrow: 1, justifyContent: 'center' },
-  head: { fontSize: 22, fontWeight: '700', marginBottom: 20, textAlign: 'center' },
-  input: {
+  container: {
+    flexGrow: 1,
+    backgroundColor: '#f4f7fb',
+    justifyContent: 'flex-start',
+    padding: 0,
+  },
+  headerGradient: {
+    width: '100%',
+    height: 110,
+    backgroundColor: 'linear-gradient(90deg, #0b7cff 0%, #00c6fb 100%)',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
+    paddingHorizontal: 24,
+    paddingBottom: 18,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    marginBottom: -30,
+  },
+  head: {
+    fontSize: 28,
+    fontWeight: '800',
+    color: '#fff',
+    letterSpacing: 0.5,
+  },
+  card: {
+    marginTop: -30,
+    marginHorizontal: 18,
+    backgroundColor: '#fff',
+    borderRadius: 18,
+    padding: 24,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.10,
+    shadowRadius: 10,
+    elevation: 5,
     borderWidth: 1,
-    borderColor: '#ddd',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 12,
+    borderColor: '#e3eaf2',
+  },
+  input: {
+    borderWidth: 1.5,
+    borderColor: '#e3eaf2',
+    padding: 14,
+    borderRadius: 10,
+    marginBottom: 14,
+    fontSize: 15,
+    backgroundColor: '#f4f7fb',
+    color: '#222',
   },
   btn: {
     backgroundColor: '#0b7cff',
-    padding: 14,
-    borderRadius: 8,
+    padding: 16,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 8,
+    shadowColor: '#0b7cff',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.12,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  btnText: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 16,
+    letterSpacing: 0.2,
+  },
+  loginLink: {
+    marginTop: 18,
     alignItems: 'center',
   },
-  btnText: { color: '#fff', fontWeight: '700' },
+  loginText: {
+    color: '#0b7cff',
+    fontWeight: '600',
+    fontSize: 15
+  }
 });
